@@ -1,16 +1,42 @@
-# This is a sample Python script.
+import pygame as py
+import sys
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+# Screen Setting
+py.init()
+screen_dimensions = (1280, 720)
+screen = py.display.set_mode(screen_dimensions)
+clock = py.time.Clock()
+
+# Misc Setup
+py.display.set_caption("ICT project: Info inc.")
+
+# Graphics Setup
+bg = py.image.load("Graphics/R-C (3).jpeg")
+# insert the needed image
+
+ship_group = py.sprite.GroupSingle()
+
+player = Player(group=ship_group)
+
+# ORIGIN TOP LEFT, Y AXIS FLIPPED, USE TOP LEFT
+# GET RECT
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+# Game Loop
+while True:
+    # Event Loop
+    for event in py.event.get():
+        if event.type == py.QUIT:
+            py.quit()
+            sys.exit()
 
+    # Time, Updates, Graphics
+    delta_time = clock.tick(120) / 1000
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    ship_group.update()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    screen.blit(bg, (0, 0))
+    ship_group.draw(screen)
+
+    # Screen Updates
+    py.display.update()
