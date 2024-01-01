@@ -1,42 +1,34 @@
-import pygame as py
+import pygame
 import sys
 
-# Screen Setting
-py.init()
-screen_dimensions = (1280, 720)
-screen = py.display.set_mode(screen_dimensions)
-clock = py.time.Clock()
+# 初始化 Pygame
+pygame.init()
 
-# Misc Setup
-py.display.set_caption("ICT project: Info inc.")
+# 定义窗口大小
+width, height = 800, 600
+window = pygame.display.set_mode((width, height))
+pygame.display.set_caption('Info spread')  # 更改为你的游戏名称
 
-# Graphics Setup
-bg = py.image.load("Graphics/R-C (3).jpeg")
-# insert the needed image
+# 加载背景图像
+background = pygame.image.load('background.jpg').convert()  # 加载背景图像
+background = pygame.transform.scale(background, (width, height))  # 调整图像大小以适应窗口
 
-ship_group = py.sprite.GroupSingle()
+# 游戏主循环
+running = True
+while running:
+    # 事件处理
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-player = Player(group=ship_group)
+    # 绘制背景图像
+    window.blit(background, (0, 0))  # 在窗口上绘制背景图像
 
-# ORIGIN TOP LEFT, Y AXIS FLIPPED, USE TOP LEFT
-# GET RECT
+    # 在这里添加其他绘制和更新游戏元素的代码
 
+    # 更新屏幕显示
+    pygame.display.flip()
 
-# Game Loop
-while True:
-    # Event Loop
-    for event in py.event.get():
-        if event.type == py.QUIT:
-            py.quit()
-            sys.exit()
-
-    # Time, Updates, Graphics
-    delta_time = clock.tick(120) / 1000
-
-    ship_group.update()
-
-    screen.blit(bg, (0, 0))
-    ship_group.draw(screen)
-
-    # Screen Updates
-    py.display.update()
+# 退出 Pygame
+pygame.quit()
+sys.exit()
