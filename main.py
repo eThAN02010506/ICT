@@ -1,6 +1,9 @@
 import pygame
 import sys
 import enteringPage
+from city_data import city_population, city_spread_rates
+from algorithm import calculate_affected_population
+from city_functions import calculate_city_affected_population
 
 def main_game_logic(player_name):
     pygame.init()
@@ -9,8 +12,11 @@ def main_game_logic(player_name):
     window = pygame.display.set_mode((width, height))
     pygame.display.set_caption('Info spread')
 
-    background = pygame.image.load('/Users/ethanjiang/PycharmProjects/ICT roject/Graphics/下载 (1).jpeg').convert()
+    background = pygame.image.load('Graphics/下载 (1).jpeg').convert()  # 修改为背景图的路径
     background = pygame.transform.scale(background, (width, height))
+
+    elapsed_time = 0
+    upgrade_point = 0
 
     running = True
     while running:
@@ -19,12 +25,30 @@ def main_game_logic(player_name):
                 pygame.quit()
                 sys.exit()
 
-        window.blit(background, (0, 0))  # Draw the background
+        elapsed_time += 1
+        upgrade_point, total_population = calculate_city_affected_population(elapsed_time, upgrade_point)
 
-        # Display the player's name on the screen
-        font = pygame.font.Font(None, 36)
-        text_surface = font.render(f"Info Name: {player_name}", True, (255, 255, 255))
-        window.blit(text_surface, (10, 10))  # Adjust the position if needed
+        total_affected_population = 0
+        for city in city_population:
+            spread_rate = city_spread_rates[city]
+            affected_population, _ = calculate_affected_population(city_population[city], spread_rate, elapsed_time, 0)
+            total_affected_population += affected_population
+
+        window.blit(background, (0, 0))  # 显示背景图
+
+        font = pygame.font.Font(None, 24)
+        text_total_population = font.render(f"Total Population: {total_population}", True, (255, 255, 255))
+        text_total_affected = font.render(f"Total Affected Population: {total_affected_population:.0f}", True, (255, 255, 255))
+
+        text_total_population_rect = text_total_population.get_rect()
+        text_total_population_rect.topright = (width - 10, 10)
+        window.blit(text_total_population, text_total_population_rect)
+
+        text_total_affected_rect = text_total_affected.get_rect()
+        text_total_affected_rect.topright = (width - 10, 40)
+        window.blit(text_total_affected, text_total_affected_rect)
+
+        # 其他游戏逻辑...
 
         pygame.display.flip()
 
