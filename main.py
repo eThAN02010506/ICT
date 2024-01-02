@@ -1,34 +1,39 @@
 import pygame
 import sys
+import enteringPage
 
-# 初始化 Pygame
-pygame.init()
+def main_game_logic(player_name):
+    pygame.init()
 
-# 定义窗口大小
-width, height = 800, 600
-window = pygame.display.set_mode((width, height))
-pygame.display.set_caption('Info spread')  # 更改为你的游戏名称
+    width, height = 800, 600
+    window = pygame.display.set_mode((width, height))
+    pygame.display.set_caption('Info spread')
 
-# 加载背景图像
-background = pygame.image.load('background.jpg').convert()  # 加载背景图像
-background = pygame.transform.scale(background, (width, height))  # 调整图像大小以适应窗口
+    background = pygame.image.load('/Users/ethanjiang/PycharmProjects/ICT roject/Graphics/下载 (1).jpeg').convert()
+    background = pygame.transform.scale(background, (width, height))
 
-# 游戏主循环
-running = True
-while running:
-    # 事件处理
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
-    # 绘制背景图像
-    window.blit(background, (0, 0))  # 在窗口上绘制背景图像
+        window.blit(background, (0, 0))  # Draw the background
 
-    # 在这里添加其他绘制和更新游戏元素的代码
+        # Display the player's name on the screen
+        font = pygame.font.Font(None, 36)
+        text_surface = font.render(f"Info Name: {player_name}", True, (255, 255, 255))
+        window.blit(text_surface, (10, 10))  # Adjust the position if needed
 
-    # 更新屏幕显示
-    pygame.display.flip()
+        pygame.display.flip()
 
-# 退出 Pygame
-pygame.quit()
-sys.exit()
+def start():
+    clicked_start = enteringPage.show_entering_page()
+    if clicked_start:
+        player_name = enteringPage.ask_player_name()
+        if player_name:
+            main_game_logic(player_name)
+
+if __name__ == "__main__":
+    start()
